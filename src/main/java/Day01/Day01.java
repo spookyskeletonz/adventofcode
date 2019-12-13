@@ -3,19 +3,34 @@ package Day01;
 import java.io.*;
 import java.util.Scanner;
 
-public class Day01 {
-    public int solveFile(File file) throws FileNotFoundException{
+class Day01 {
+    int solveFileForPartOne(File file) throws FileNotFoundException {
       Scanner fileScanner = new Scanner(file);
       int total = 0;
       while (fileScanner.hasNextInt()) {
-        int mass = fileScanner.nextInt();
-        total += solveInt(mass);
+        total += solveInt(fileScanner.nextInt());
       }
 
       return total;
     }
 
+    int solveFileForPartTwo(File file) throws FileNotFoundException {
+      Scanner fileScanner = new Scanner(file);
+      int total = 0;
+      while (fileScanner.hasNextInt()) {
+        total += getFuel(fileScanner.nextInt());
+      }
+      return total;
+    }
+
     private int solveInt(int mass) {
       return mass/3 - 2;
+    }
+
+    private int getFuel(int mass) {
+      if (mass <= 0) return 0;
+      int fuel = solveInt(mass);
+      if (fuel <= 0) return 0;
+      return fuel + getFuel(fuel);
     }
 }
