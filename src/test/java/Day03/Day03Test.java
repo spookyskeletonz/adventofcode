@@ -30,6 +30,6 @@ public class Day03Test {
   @Test
   public void testPartTwoLargeInput() throws Exception {
     File file = new File(getClass().getClassLoader().getResource("Day03/input.txt").getFile());
-    assertEquals(731, day.solvePartTwo(file));
+    assertEquals(5672, day.solvePartTwo(file));
   }
 }
