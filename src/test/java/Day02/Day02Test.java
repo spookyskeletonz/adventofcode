@@ -20,4 +20,10 @@ public class Day02Test {
     File file = new File(getClass().getClassLoader().getResource("Day02/input.txt").getFile());
     assertEquals(4023471, day.solvePartOne(file));
   }
+
+  @Test
+  public void testPartTwo() throws Exception {
+    File file = new File(getClass().getClassLoader().getResource("Day02/input.txt").getFile());
+    assertEquals(8051, day.solvePartTwo(file));
+  }
 }

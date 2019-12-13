@@ -2,10 +2,7 @@ package Day02;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class Day02 {
@@ -27,10 +24,37 @@ class Day02 {
   private static Integer MULTIPLY = 2;
   private static Integer HALT = 99;
 
-  private List<Integer> program = new ArrayList<Integer>();
+  int solvePartOne(File file) throws FileNotFoundException {
+    List<Integer> program = loadProgramFromFile(file);
+    return compute(program);
+  }
 
-  public int solvePartOne(File file) throws FileNotFoundException {
-    loadProgramFromFile(file);
+  int solvePartTwo(File file) throws FileNotFoundException {
+    // I don't like this solution. O(n^2)
+    int noun = 0;
+    int verb = 0;
+    List<Integer> original = loadProgramFromFile(file);
+    List<Integer> program = loadProgramFromFile(file);
+    while (noun < program.size()) {
+      while (verb < program.size()) {
+        program.set(1, noun);
+        program.set(2, verb);
+        int res = compute(program);
+        if (res == 19690720) {
+          return 100 * noun + verb;
+        }
+        verb++;
+        // reset program after failed attempt, need to completely clear and re-add
+        program.clear();
+        program.addAll(original);
+      }
+      noun++;
+      verb = 0;
+    }
+    throw new RuntimeException("No possible solution");
+  }
+
+  private int compute(List<Integer> program) {
     // variables that we will be using and mutating within the loop
     // index to check for an opcode
     int index = 0;
@@ -55,12 +79,11 @@ class Day02 {
     return program.get(0);
   }
 
-  private void loadProgramFromFile(File file) throws FileNotFoundException{
+  private List<Integer> loadProgramFromFile(File file) throws FileNotFoundException {
     Scanner fileScanner = new Scanner(file);
-    this.program.clear();
     // take input line, split on ',' and convert to list of Integers
-    program = Arrays.stream(fileScanner.nextLine().split(","))
+    return Arrays.stream(fileScanner.nextLine().split(","))
             .map(Integer::valueOf)
-            .collect(Collectors.toList());
+            .collect(Collectors.toCollection(ArrayList::new));
   }
 }
