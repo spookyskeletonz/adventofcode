@@ -10,11 +10,33 @@ class Day03 {
     Scanner scanner = new Scanner(file);
     List<Path> wireOnePath = parseInputLine(scanner.nextLine());
     List<Path> wireTwoPath = parseInputLine(scanner.nextLine());
-    HashSet<Coordinate> wireOneCoords = plotCoordinates(wireOnePath);
-    HashSet<Coordinate> wireTwoCoords = plotCoordinates(wireTwoPath);
-    HashSet<Coordinate> crosses = new HashSet<>(wireOneCoords);
+    Set<Coordinate> wireOneCoords = plotCoordinates(wireOnePath);
+    Set<Coordinate> wireTwoCoords = plotCoordinates(wireTwoPath);
+    Set<Coordinate> crosses = new HashSet<>(wireOneCoords);
     crosses.retainAll(wireTwoCoords);
     return distanceToClosestCross(crosses);
+  }
+
+  int solvePartTwo(File file) throws FileNotFoundException {
+    Scanner scanner = new Scanner(file);
+    List<Path> wireOnePath = parseInputLine(scanner.nextLine());
+    List<Path> wireTwoPath = parseInputLine(scanner.nextLine());
+    Map<Coordinate, Integer> wireOneCoords = plotCoordinatesPartTwo(wireOnePath);
+    Map<Coordinate, Integer> wireTwoCoords = plotCoordinatesPartTwo(wireTwoPath);
+    Set<Coordinate> crosses = new HashSet<>(wireOneCoords.keySet());
+    crosses.retainAll(wireTwoCoords.keySet());
+    return minimumCombinedStepsToCross(crosses, wireOneCoords, wireTwoCoords);
+  }
+
+  private int minimumCombinedStepsToCross(Set<Coordinate> crosses, Map<Coordinate, Integer> stepsOne,
+                                          Map<Coordinate, Integer> stepsTwo) {
+    if (crosses.size() == 0) throw new RuntimeException("No crosses found");
+    int minSteps = Integer.MAX_VALUE;
+    for (Coordinate cross : crosses) {
+      int steps = stepsOne.get(cross) + stepsTwo.get(cross);
+      if (steps < minSteps) minSteps = steps;
+    }
+    return minSteps;
   }
 
   private int distanceToClosestCross(Set<Coordinate> crosses) {
@@ -27,10 +49,53 @@ class Day03 {
     return minDist;
   }
 
-  private HashSet<Coordinate> plotCoordinates(List<Path> paths) {
+  private Map<Coordinate, Integer> plotCoordinatesPartTwo(List<Path> paths) {
     int currentX = 0;
     int currentY = 0;
-    HashSet<Coordinate> coordinates = new HashSet<>();
+    int numSteps = 0;
+    Map<Coordinate, Integer> coordinates = new HashMap<>();
+    for (Path path : paths) {
+      if (path.direction.equals(Direction.UP)) {
+        int travellingY = currentY;
+        while (travellingY != currentY + path.distance) {
+          numSteps++;
+          travellingY++;
+          coordinates.put(new Coordinate(currentX, travellingY), numSteps);
+        }
+        currentY = travellingY;
+      } else if (path.direction.equals(Direction.DOWN)) {
+        int travellingY = currentY;
+        while (travellingY != currentY - path.distance) {
+          numSteps++;
+          travellingY--;
+          coordinates.put(new Coordinate(currentX, travellingY), numSteps);
+        }
+        currentY = travellingY;
+      } else if (path.direction.equals(Direction.LEFT)) {
+        int travellingX = currentX;
+        while (travellingX != currentX - path.distance) {
+          numSteps++;
+          travellingX--;
+          coordinates.put(new Coordinate(travellingX, currentY), numSteps);
+        }
+        currentX = travellingX;
+      } else if (path.direction.equals(Direction.RIGHT)) {
+        int travellingX = currentX;
+        while (travellingX != currentX + path.distance) {
+          numSteps++;
+          travellingX++;
+          coordinates.put(new Coordinate(travellingX, currentY), numSteps);
+        }
+        currentX = travellingX;
+      }
+    }
+    return coordinates;
+  }
+
+  private Set<Coordinate> plotCoordinates(List<Path> paths) {
+    int currentX = 0;
+    int currentY = 0;
+    Set<Coordinate> coordinates = new HashSet<>();
     for (Path path : paths) {
       if (path.direction.equals(Direction.UP)) {
         int travellingY = currentY;
