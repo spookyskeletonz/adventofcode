@@ -43,12 +43,10 @@ class Day04 {
     /* Rules:
      *  - exactly (no more no less) two adjacent digits in value must be equal
      *  - no digit can be greater than its predecessor */
-    // what we will eventually return. should only be set to true and never to false
+    // what we will eventually return. should only be set to true and never to false from here on
     boolean finalAdj = false;
-    // keeps track of whether we should consider adjacent numbers next to each other (if there are more than 2 this will be false)
-    boolean globAdj = false;
-    // keeps track of if our last comparison was also adjacent
-    boolean curAdj = false;
+    // keeps track of the number of consecutive matches we have seen ({1,1,1} = 2, {1,1} = 1, {1,3} = 0)
+    int numMatch = 0;
 
     int[] digits = String.valueOf(value).chars()
         .map(c -> Integer.parseInt(String.valueOf((char) c)))
@@ -64,21 +62,16 @@ class Day04 {
         return false;
       }
       // Check adjacency match rule
+      // only process this rule if we haven't already found exactly 2 consecutive digits in a row matching
       if (!finalAdj) {
-       // only process this rule if we haven't already found exactly 2 consecutive digits in a row matching
-        if (val == nextVal && !curAdj) {
-          if (index == 0) finalAdj = true;
-          globAdj = true;
-          curAdj = true;
-        } else if (val == nextVal && curAdj) {
-          globAdj = false;
-        } else if (curAdj && globAdj) {
-          // found exactly two matches
-          curAdj = false;
-          finalAdj = true;
-        } else if (curAdj) {
-          // no longer adjacent matches
-          curAdj = false;
+        if (val == nextVal) {
+          numMatch++;
+          /* if we are at the first element (last one processed) and have found a match with exactly 2 consecutive,
+           * set finalAdj to true */
+          if (numMatch == 1 && index == 0) finalAdj = true;
+        } else {
+          if (numMatch == 1) finalAdj = true;
+          numMatch = 0;
         }
       }
       index--;
