@@ -53,7 +53,6 @@ class Day04 {
         .toArray();
     // start index at second last element
     int index = digits.length - 2;
-    // last element
     while (index >= 0) {
       int nextVal = digits[index + 1];
       int val = digits[index];
