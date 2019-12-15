@@ -185,7 +185,7 @@ public class Day05p2 {
             continue;
           }
           case EQUALS: {
-                        Parameter one;
+            Parameter one;
             Parameter two;
             if (modes.length == 0) {
               one = new Parameter(Mode.POSITION, program.get(index + 1));
