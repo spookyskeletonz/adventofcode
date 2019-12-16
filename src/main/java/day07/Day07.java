@@ -6,6 +6,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 class Day07 {
+  // TODO (Neil) FINISH PART 2. You need to be able to PAUSE an amplifier and RESTART when it comes back!
+  // WILL NEED TO KEEP STATE OF EACH AMPLIFIER.
+
+
+
   // OPCODES
   private static final String ADD = "01";
   private static final String MULTIPLY = "02";
