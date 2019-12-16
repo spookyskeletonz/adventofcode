@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Day07 {
+class Day07 {
   // OPCODES
   private static final String ADD = "01";
   private static final String MULTIPLY = "02";
@@ -21,7 +21,7 @@ public class Day07 {
   int solvePartOne(File file) throws FileNotFoundException {
     List<Integer> program = loadProgramFromFile(file);
     allPhasePerms = new HashSet<>();
-    addAllPhasePerms(5, new int[]{0,1,2,3,4});
+    addAllPhasePerms(new int[]{0,1,2,3,4});
     int maxSignal = Integer.MIN_VALUE;
     for (int[] perm : allPhasePerms) {
       int index = 0;
@@ -39,16 +39,49 @@ public class Day07 {
     return maxSignal;
   }
 
-  private void addAllPhasePerms(int numPhases, int[] phases) {
-    int[] indexes = new int[numPhases];
-    for (int i = 0; i < numPhases; i++) {
+  int solvePartTwo(File file) throws FileNotFoundException {
+    List<Integer> program = loadProgramFromFile(file);
+    allPhasePerms = new HashSet<>();
+    addAllPhasePerms(new int[]{5,6,7,8,9});
+    int maxSignal = Integer.MIN_VALUE;
+    for (int[] perm : allPhasePerms) {
+      int index = 0;
+      Queue<Integer> inputs = new LinkedList<>();
+      inputs.add(perm[index]);
+      inputs.add(0);
+      int output = 0;
+      boolean firstPhase = true;
+      while (true) {
+        if (!firstPhase) {
+         inputs.add(perm[index]);
+        } else {
+          firstPhase = false;
+        }
+        output = computeProgram(program, inputs);
+        if (output == Integer.MIN_VALUE) break;
+        if (index == perm.length - 1) {
+          if (output > maxSignal) maxSignal = output;
+          inputs.clear();
+          index = 0;
+        } else {
+          inputs.clear();
+          index++;
+        }
+      }
+    }
+    return maxSignal;
+  }
+
+  private void addAllPhasePerms(int[] phases) {
+    int[] indexes = new int[phases.length];
+    for (int i = 0; i < phases.length; i++) {
       indexes[i] = 0;
     }
 
     allPhasePerms.add(Arrays.copyOf(phases, phases.length));
 
     int i = 0;
-    while (i < numPhases) {
+    while (i < phases.length) {
       if (indexes[i] < i) {
         swap(phases, i % 2 == 0 ?  0: indexes[i], i);
         allPhasePerms.add(Arrays.copyOf(phases, phases.length));
@@ -69,10 +102,9 @@ public class Day07 {
   }
 
   private int computeProgram(List<Integer> program, Queue<Integer> inputs) {
-    if (inputs.size() != 2) throw new RuntimeException("TOO MANY INPUTS");
     int output = 0;
     int index = 0;
-    while (index < (program.size()) && !program.get(index).equals(Integer.parseInt(HALT))) {
+    while (index < (program.size())) {
       String operation = String.valueOf(program.get(index));
       if (operation.length() == 1) {
         // no param modes
@@ -113,6 +145,8 @@ public class Day07 {
                 new Parameter(Mode.POSITION, program.get(index + 2)), program.get(index + 3));
             index += 4;
             continue;
+          case "99":
+            return Integer.MIN_VALUE;
         }
       } else {
         String opCode = operation.substring(operation.length() - 2);
@@ -266,11 +300,13 @@ public class Day07 {
   }
 
   private List<Integer> performInput(List<Integer> program, Integer writePos, Integer input) {
+    System.out.println("input: " + input);
     program.set(writePos, input);
     return program;
   }
 
   private int performOutput(List<Integer> program, Parameter param) {
+    System.out.println("output: " + getParamVal(program, param));
     return getParamVal(program, param);
   }
 
