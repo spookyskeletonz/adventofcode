@@ -4,9 +4,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import static org.junit.Assert.*;
 
@@ -26,8 +23,14 @@ public class Day07Test {
   }
 
   @Test
-  public void testPartTwoInput() throws FileNotFoundException {
+  public void testPartTwoBasic() throws FileNotFoundException {
     File file = new File(getClass().getClassLoader().getResource("Day07/basicp2.txt").getFile());
     assertEquals(139629729, day.solvePartTwo(file));
+  }
+
+  @Test
+  public void testPartTwoInput() throws FileNotFoundException {
+    File file = new File(getClass().getClassLoader().getResource("Day07/input.txt").getFile());
+    assertEquals(34579864, day.solvePartTwo(file));
   }
 }
