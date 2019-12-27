@@ -431,7 +431,6 @@ class Day07 {
     public void run() {
       try {
         this.computeProgram();
-        System.out.println("final output: " + output);
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
       }
@@ -445,7 +444,7 @@ class Day07 {
         if (operation.equals(HALT)) {
           System.out.println("final output: " + output + ", finished");
           finalOutput = output;
-          break;
+          return;
         }
         if (operation.length() == 1) {
           // no param modes
@@ -619,7 +618,7 @@ class Day07 {
             }
           }
         }
-        System.out.println(operation);
+        throw new RuntimeException("Should not throw this");
       }
       System.out.println("final output: " + output + ", finished");
       finalOutput = output;
