@@ -17,4 +17,10 @@ public class Day09Test {
     File file = new File(getClass().getClassLoader().getResource("Day09/input.txt").getFile());
     assertTrue(3063082071L == day.solvePartOne(file, new LinkedList<>(Arrays.asList(1L))));
   }
+
+  @Test
+  public void testPartTwoInput() throws FileNotFoundException {
+    File file = new File(getClass().getClassLoader().getResource("Day09/input.txt").getFile());
+    assertTrue(81348 == day.solvePartOne(file, new LinkedList<>(Arrays.asList(2L))));
+  }
 }
