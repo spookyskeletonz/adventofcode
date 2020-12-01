@@ -1,2 +1,4 @@
-# adventofcode2019
-my solutions to the Advent of Code 2019 problems
+# adventofcode
+my solutions to the Advent of Code problems
+
+Years: 2019,2020
