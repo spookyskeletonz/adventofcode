@@ -11,7 +11,7 @@ public class Day01Test {
 
     @Test
     public void testPartOneBasic() throws Exception {
-      File file = new File(getClass().getClassLoader().getResource("Day01/testPartOneBasic.txt").getFile());
+      File file = new File(getClass().getClassLoader().getResource("Day01/testOne.txt").getFile());
       assertEquals(2, day.solveFileForPartOne(file));
     }
 
