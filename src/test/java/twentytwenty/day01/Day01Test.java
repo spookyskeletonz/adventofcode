@@ -1,4 +1,4 @@
-package twentytwenty;
+package twentytwenty.day01;
 
 import org.junit.Test;
 import twentytwenty.day01.Day01;
