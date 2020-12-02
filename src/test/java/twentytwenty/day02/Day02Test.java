@@ -21,4 +21,16 @@ public class Day02Test {
     File file = new File(getClass().getClassLoader().getResource("twentytwenty/day02/inputOne.txt").getFile());
     System.out.println(day.solvePartOne(file));
   }
+
+  @Test
+  public void testPartTwoBasic() throws Exception {
+    File file = new File(getClass().getClassLoader().getResource("twentytwenty/day02/testOne.txt").getFile());
+    assertEquals(1, day.solvePartTwo(file));
+  }
+
+  @Test
+  public void testPartTwoInput() throws Exception {
+    File file = new File(getClass().getClassLoader().getResource("twentytwenty/day02/inputOne.txt").getFile());
+    System.out.println(day.solvePartTwo(file));
+  }
 }

@@ -25,4 +25,18 @@ public class Day02 {
     }
     return numValid;
   }
+
+  public int solvePartTwo(File file) throws FileNotFoundException {
+    Scanner fileScanner = new Scanner(file);
+    int numValid = 0;
+    while (fileScanner.hasNextLine()) {
+      String line = fileScanner.nextLine();
+      String[] cols = line.split(" ");
+      int indexOne = Integer.parseInt(cols[0].split("-")[0]) - 1;
+      int indexTwo = Integer.parseInt(cols[0].split("-")[1]) - 1;
+      int character = cols[1].charAt(0);
+      if ((cols[2].charAt(indexOne) == character) ^ (cols[2].charAt(indexTwo) == character)) numValid++;
+    }
+    return numValid;
+  }
 }
