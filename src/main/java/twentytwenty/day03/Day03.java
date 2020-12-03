@@ -2,13 +2,15 @@ package twentytwenty.day03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Day03 {
 
-  public static ArrayList<ArrayList<Boolean>> generateTreeGrid(File file) {
+  public static ArrayList<ArrayList<Boolean>> generateTreeGrid(File file) throws FileNotFoundException {
     var treeGrid = new ArrayList<ArrayList<Boolean>>();
+    Scanner fileScanner = new Scanner(file);
     while (fileScanner.hasNextLine()) {
       String line = fileScanner.nextLine();
       var row = new ArrayList<Boolean>();
@@ -20,29 +22,37 @@ public class Day03 {
         } else {
           System.out.println("ERROR");
         }
-        ++i;
       }
+      treeGrid.add(row);
     }
     return treeGrid;
   }
 
-  public int solvePartOne(File file) throws FileNotFoundException {
-    Scanner fileScanner = new Scanner(file);
-    var treeGrid = generateTreeGrid(file);
-    return numValid;
+  public static long findTreesForSlope(int xInc, int yInc, ArrayList<ArrayList<Boolean>> treeGrid) {
+    var xIndex = 0;
+    var yIndex = 0;
+    var numTrees = 0L;
+    while (yIndex < treeGrid.size()) {
+      if (treeGrid.get(yIndex).get(xIndex)) {
+        numTrees++;
+      }
+      xIndex = (xIndex + xInc) % (treeGrid.get(yIndex).size());
+      yIndex += yInc;
+    }
+    return numTrees;
   }
 
-  public int solvePartTwo(File file) throws FileNotFoundException {
-    Scanner fileScanner = new Scanner(file);
-    int numValid = 0;
-    while (fileScanner.hasNextLine()) {
-      String line = fileScanner.nextLine();
-      String[] cols = line.split(" ");
-      int indexOne = Integer.parseInt(cols[0].split("-")[0]) - 1;
-      int indexTwo = Integer.parseInt(cols[0].split("-")[1]) - 1;
-      int character = cols[1].charAt(0);
-      if ((cols[2].charAt(indexOne) == character) ^ (cols[2].charAt(indexTwo) == character)) numValid++;
-    }
-    return numValid;
+  public long solvePartOne(File file) throws FileNotFoundException {
+    var treeGrid = generateTreeGrid(file);
+    return findTreesForSlope(3, 1, treeGrid);
+  }
+
+  public long solvePartTwo(File file) throws FileNotFoundException {
+    var treeGrid = generateTreeGrid(file);
+    return findTreesForSlope(1, 1, treeGrid)
+            * findTreesForSlope(3, 1, treeGrid)
+            * findTreesForSlope(5, 1, treeGrid)
+            * findTreesForSlope(7, 1, treeGrid)
+            * findTreesForSlope(1, 2, treeGrid);
   }
 }
