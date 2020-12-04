@@ -1,6 +1,2 @@
-# adventofcode
-my solutions to the Advent of Code problems
-
-Years: 
- - 2019
- - 2020
+# Advent Of Code 2019/20 
+Solutions to Advent of Code
