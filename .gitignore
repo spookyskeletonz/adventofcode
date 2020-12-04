@@ -12,6 +12,7 @@
 
 # intellij
 .idea/
+*.iml
 
 # target
 target/
