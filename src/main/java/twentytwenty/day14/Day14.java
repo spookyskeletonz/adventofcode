@@ -109,17 +109,18 @@ public class Day14 {
   public List<String> possiblePerms(String suffix) {
     if (suffix.isEmpty()) return List.of("");
     var list = new ArrayList<String>();
+    var suffixPerms = possiblePerms(suffix.substring(1));
     if (suffix.startsWith("X")) {
-      // add all possible permutations for replace X with either 1 or 0
-      list.addAll(possiblePerms(suffix.substring(1)).stream()
+      // add all possible permutations, replace X with either 1 or 0
+      list.addAll(suffixPerms.stream()
           .map(s -> '1' + s)
           .collect(Collectors.toList()));
-      list.addAll(possiblePerms(suffix.substring(1)).stream()
+      list.addAll(suffixPerms.stream()
           .map(s -> '0' + s)
           .collect(Collectors.toList()));
     } else {
       // add possible permutations for suffix
-      list.addAll(possiblePerms(suffix.substring(1)).stream()
+      list.addAll(suffixPerms.stream()
           .map(s -> suffix.charAt(0) + s)
           .collect(Collectors.toList()));
     }
