@@ -34,27 +34,18 @@ public class Day05 {
 
   public int solvePartOne(File file) throws FileNotFoundException {
     var scanner = new Scanner(file);
-    var coordMap = loadInputIntoCoordinateMap(scanner, true);
-    var numMultiplePoints = 0;
-    for (var entry : coordMap.entrySet()) {
-      if (entry.getValue() > 1) numMultiplePoints++;
-    }
-    return numMultiplePoints;
+    return getNumOverlapPoints(scanner, true);
   }
 
   public int solvePartTwo(File file) throws FileNotFoundException {
     var scanner = new Scanner(file);
-    var coordMap = loadInputIntoCoordinateMap(scanner, false);
-    var numMultiplePoints = 0;
-    for (var entry : coordMap.entrySet()) {
-      if (entry.getValue() > 1) numMultiplePoints++;
-    }
-    return numMultiplePoints;
+    return getNumOverlapPoints(scanner, false);
   }
 
-  // Map = Key: Coordinate => Value: Number of lines on that point
-  public Map<Coord, Integer> loadInputIntoCoordinateMap(Scanner fileScanner, boolean onlyHorizVert) {
+  public int getNumOverlapPoints(Scanner fileScanner, boolean onlyHorizVert) {
+    // Map = Key: Coordinate => Value: Number of lines on that point
     var coordMap = new HashMap<Coord, Integer>();
+    var numOverlapPoints = 0;
     while (fileScanner.hasNextLine()) {
       var line = fileScanner.nextLine();
       var coordStrings = line.split(" -> ");
@@ -73,6 +64,9 @@ public class Day05 {
       var key = new Coord(x, y);
       var numLines = coordMap.getOrDefault(key, 0);
       numLines++;
+      if (numLines == 2) {
+        numOverlapPoints++;
+      }
       coordMap.put(key, numLines);
       // Walk and update coords to end of line
       while (x != lineEndCoord.x || y != lineEndCoord.y) {
@@ -89,9 +83,12 @@ public class Day05 {
         key = new Coord(x, y);
         numLines = coordMap.getOrDefault(key, 0);
         numLines++;
+        if (numLines == 2) {
+          numOverlapPoints++;
+        }
         coordMap.put(key, numLines);
       }
     }
-    return coordMap;
+    return numOverlapPoints;
   }
 }
