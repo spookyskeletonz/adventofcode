@@ -14,12 +14,7 @@ public class Day04 {
     BingoSquare[][] squares = new BingoSquare[5][5];
   }
 
-  public int solvePartOne(File file) throws FileNotFoundException {
-    Scanner fileScanner = new Scanner(file);
-    var drawNumbers = fileScanner.nextLine().split(",");
-    // Build boards
-    fileScanner.nextLine();
-    var boards = new ArrayList<BingoBoard>();
+  public void loadBoards(Scanner fileScanner, ArrayList<BingoBoard> boards) {
     var boardNumber = 0;
     var rowNum = 0;
     boards.add(initialiseBoard());
@@ -42,6 +37,15 @@ public class Day04 {
       }
       rowNum++;
     }
+  }
+
+  public int solvePartOne(File file) throws FileNotFoundException {
+    Scanner fileScanner = new Scanner(file);
+    var drawNumbers = fileScanner.nextLine().split(",");
+    // Build boards
+    fileScanner.nextLine();
+    var boards = new ArrayList<BingoBoard>();
+    loadBoards(fileScanner, boards);
     // Draw numbers and mark boards
     for (var value : drawNumbers) {
       for (var board : boards) {
@@ -54,6 +58,36 @@ public class Day04 {
           }
         }
       }
+    }
+    return 0;
+  }
+
+  public int solvePartTwo(File file) throws FileNotFoundException {
+    Scanner fileScanner = new Scanner(file);
+    var drawNumbers = fileScanner.nextLine().split(",");
+    // Build boards
+    fileScanner.nextLine();
+    var boards = new ArrayList<BingoBoard>();
+    loadBoards(fileScanner, boards);
+    // Draw numbers and mark boards
+    for (var value : drawNumbers) {
+      var newBoards = new HashSet<>(boards);
+      for (var board : boards) {
+        var markedCoords = markValueOnBoard(Integer.parseInt(value), board);
+        if (!markedCoords.isEmpty()) {
+          for (var coord : markedCoords) {
+            if (boardWinsFromThisSquare(coord[0], coord[1], board)) {
+              // Only return on final board to win
+              if (boards.size() == 1) {
+                return calculateScore(board, Integer.parseInt(value));
+              } else {
+                newBoards.remove(board);
+              }
+            }
+          }
+        }
+      }
+      boards = new ArrayList<>(newBoards);
     }
     return 0;
   }
