@@ -34,7 +34,7 @@ public class Day07 {
     for (var step = minHoriz; step <= maxHoriz; step++) {
       final int finalStep = step;
       var fuelCount = horizontals.stream().mapToInt(x -> x).map(x -> Math.abs(x - finalStep)).sum();
-      // When we get fuelCount different that is greater than the starting value then we have passed most efficient
+      // When we get fuelCount different that is greater than the previous value then we have passed most efficient
       if (fuelCount > prevFuelCount) {
         return prevFuelCount;
       }
@@ -57,7 +57,7 @@ public class Day07 {
             }
             return sum;})
           .sum();
-      // When we get fuelCount different that is greater than the starting value then we have passed most efficient
+      // When we get fuelCount different that is greater than the previous value then we have passed most efficient
       if (fuelCount > prevFuelCount) {
         return prevFuelCount;
       }
