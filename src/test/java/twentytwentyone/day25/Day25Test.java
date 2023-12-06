@@ -23,7 +23,7 @@ public class Day25Test {
 
 //  @Test
 //  public void testPartTwoBasic() throws Exception {
-//    var file = new File(getClass().getClassLoader().getResource("twentytwentyone/day25/testOne.txt").getFile());
+//    var file = new File(getClass().getClassLoader().getResource("twentytwentyone/day25/inputOne.txt").getFile());
 //    assertEquals(2758514936282255L, day.solvePartTwo(file));
 //  }
 //
