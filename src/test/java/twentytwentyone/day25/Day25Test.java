@@ -23,13 +23,13 @@ public class Day25Test {
 
 //  @Test
 //  public void testPartTwoBasic() throws Exception {
-//    var file = new File(getClass().getClassLoader().getResource("twentytwentyone/day25/inputOne.txt").getFile());
+//    var file = new File(getClass().getClassLoader().getResource("twentytwentyone/day25/testOne.txt").getFile());
 //    assertEquals(2758514936282255L, day.solvePartTwo(file));
 //  }
 //
 //  @Test
 //  public void testPartTwoInput() throws Exception {
-//    var file = new File(getClass().getClassLoader().getResource("twentytwentyone/day25/inputOne.txt").getFile());
+//    var file = new File(getClass().getClassLoader().getResource("twentytwentyone/day25/testOne.txt").getFile());
 //    assertEquals(1211172281877240L, day.solvePartTwo(file));
 //  }
 }
