@@ -28,6 +28,6 @@ public class Day13Test {
     @Test
     public void testPartTwoInput() throws Exception {
         File file = new File(getClass().getClassLoader().getResource("twentytwentythree/day13/inputOne.txt").getFile());
-        Assert.assertEquals(1082, Day13.solvePartTwo(file));
+        Assert.assertEquals(39037, Day13.solvePartTwo(file));
     }
 }

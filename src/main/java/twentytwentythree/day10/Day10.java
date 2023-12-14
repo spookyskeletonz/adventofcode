@@ -194,6 +194,7 @@ public class Day10 {
             }
             System.out.println();
         }
+        System.out.println();
     }
 
     // NEED TO DEBUG
