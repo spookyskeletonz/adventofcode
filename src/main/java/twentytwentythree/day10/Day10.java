@@ -130,6 +130,7 @@ public class Day10 {
         }
         loopCoords.add(path0);
 
+        // convert all non loop to '.'
         for (var i = 0; i < grid.size(); ++i) {
             for (var j = 0; j < grid.get(i).size(); ++j) {
                 if (loopCoords.contains(new Coord(i, j))) continue;
@@ -137,7 +138,13 @@ public class Day10 {
             }
         }
 
-        // convert all elements reachable from outside of loop to *
+        System.out.println("just loop");
+        printGrid(grid);
+
+        // upscale, then flood fill all elements reachable from outside of loop to *
+        System.out.println("upscaled");
+        var upscaledGrid = upscaleGrid(grid);
+        printGrid(upscaledGrid);
         Queue<Coord> toVisit = new LinkedList<Coord>();
         toVisit.add(new Coord(0, 0));
         while (!toVisit.isEmpty()) {
@@ -146,29 +153,91 @@ public class Day10 {
                 continue;
             }
             visitedPartTwo.add(curr);
-            if (!loopCoords.contains(curr)) {
-                if (curr.row < grid.size() && curr.row >= 0 && curr.col < grid.get(curr.row).size() && curr.col >= 0) {
-                    grid.get(curr.row).set(curr.col, '*');
-                    for (var i = curr.row - 1; i <= curr.row + 1; ++i) {
-                        for (var j = curr.col - 1; j <= curr.col + 1; ++j) {
-                            var coord = new Coord(i, j);
-                            if (!visitedPartTwo.contains(coord)) {
-                                toVisit.add(coord);
-                            }
-                        }
+            if (curr.row < upscaledGrid.size() && curr.row >= 0 && curr.col < upscaledGrid.get(curr.row).size() && curr.col >= 0) {
+                if (upscaledGrid.get(curr.row).get(curr.col) == '.' || upscaledGrid.get(curr.row).get(curr.col) == '/') {
+                    upscaledGrid.get(curr.row).set(curr.col, '*');
+                    var north = new Coord(curr.row - 1, curr.col);
+                    if (!visitedPartTwo.contains(north)) {
+                        toVisit.add(north);
+                    }
+                    var south = new Coord(curr.row + 1, curr.col);
+                    if (!visitedPartTwo.contains(south)) {
+                        toVisit.add(south);
+                    }
+                    var east = new Coord(curr.row, curr.col + 1);
+                    if (!visitedPartTwo.contains(east)) {
+                        toVisit.add(east);
+                    }
+                    var west = new Coord(curr.row, curr.col - 1);
+                    if (!visitedPartTwo.contains(west)) {
+                        toVisit.add(west);
                     }
                 }
             }
         }
+        System.out.println("filled");
+        printGrid(upscaledGrid);
 
-        // FOR BASIC CASE ONLY, DOES NOT HANDLE SQUEEZING BETWEEN PIPES YET. Could do this by upscaling the grid, so parallel pipes have space between them
         var dotCount = 0;
-        for (var i = 0; i < grid.size(); ++i) {
-            for (var j = 0; j < grid.get(i).size(); j++) {
-                if (grid.get(i).get(j) == '.') dotCount++;
+        for (var i = 0; i < upscaledGrid.size(); ++i) {
+            for (var j = 0; j < upscaledGrid.get(i).size(); j++) {
+                if (upscaledGrid.get(i).get(j) == '.') dotCount++;
             }
         }
         return dotCount;
+    }
+
+    private void printGrid(ArrayList<ArrayList<Character>> grid) {
+        for (var row : grid) {
+            for (var c : row) {
+                System.out.print(c);
+            }
+            System.out.println();
+        }
+    }
+
+    // NEED TO DEBUG
+    private ArrayList<ArrayList<Character>> upscaleGrid(ArrayList<ArrayList<Character>> grid) {
+        // create new grid with 1:3 size
+        var newGrid = new ArrayList<ArrayList<Character>>(grid.size() * 3);
+        for (var row : grid) {
+            var newRow = new ArrayList<>(row);
+            newRow.addAll(row);
+            newRow.addAll(row);
+            newGrid.add(newRow);
+            newGrid.add(newRow);
+            newGrid.add(newRow);
+        }
+        for (var i = 0; i < grid.size(); ++i) {
+            for (var j = 0; j < grid.get(i).size(); ++j) {
+                var charsToInsert = switch (grid.get(i).get(j)) {
+                    case '.' -> new char[]{
+                            '/','/','/',
+                            '/','.','/',
+                            '/','/','/'};
+                    case 'S' -> new char[]{'/','/','/','/','S','/','/','/','/'};
+                    case 'F' -> new char[]{'/','F','F','/','F','/','/','F','/'};
+                    case '7' -> new char[]{'7','7','/','/','7','/','/','7','/'};
+                    case 'J' -> new char[]{'/','J','/','/','J','/','J','J','/'};
+                    case 'L' -> new char[]{'/','L','/','/','L','/','/','L','L'};
+                    case '-' -> new char[]{'/','/','/','-','-','-','/','/','/'};
+                    case '|' -> new char[]{'/','|','/','/','|','/','/','|','/'};
+                    default -> throw new RuntimeException();
+                };
+                var charIndex = 0;
+                var rowMin = i * 3;
+                var rowMax = i * 3 + 2;
+                var colMin = j * 3;
+                var colMax = j * 3 + 2;
+                for (var i2 = rowMin; i2 <= rowMax; ++i2) {
+                    for (var j2 = colMin; j2 <= colMax; ++j2) {
+                        newGrid.get(i2).set(j2, charsToInsert[charIndex]);
+                        charIndex++;
+                    }
+                }
+            }
+        }
+        return newGrid;
     }
 
     private static Coord deriveNext(ArrayList<ArrayList<Character>> grid, Coord prev, Coord curr) {
